@@ -1,22 +1,40 @@
-.processed {
+.jsc-processed {
     background-color: white !important;
     color: lightgray !important;
 }
 
-.targeted.targeted-primary {
-    background-color: rgba(255,0,0,0.9) !important;
-}
-
-.targeted {
+.jsc-targeted {
     background-color: rgba(255,0,0,0.7) !important;
 }
 
 #select-tools {
-    position: absolute;
-    padding: 20px;
+	padding: 20px;
     background-color: white;
     border: solid 1px;
     box-shadow: 5px 5px 2px #505050;
+	
+    position: absolute;   
+	z-index: 10;
+}
+
+#data {
+	padding: 20px;
+    background-color: white;
+    border: solid 1px;
+    box-shadow: 5px 5px 2px #505050;
+	
+	position: absolute;
+	top: 20px;
+	left: 1200px;
+	z-index: 3;
+}
+
+#data td, #data th {
+    border: solid black thin;
+    padding: 0px 4px;
+}
+#data table {
+    border-collapse: collapse;
 }
 
 #pmask-south, #pmask-north {
@@ -24,6 +42,7 @@
     position: absolute;
     left: 0px;
     width: 100%;
+	z-index: 2;
 }
 
 #pmask-east, #pmask-west {
@@ -31,4 +50,5 @@
     position: absolute;
     top: 0px;
     height: 100%;
+	z-index: 2;
 }
