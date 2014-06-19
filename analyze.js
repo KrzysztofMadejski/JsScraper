@@ -25,6 +25,9 @@ body_width = null;
 body_height = null;
 currentMousePos = { x: -1, y: -1 };
 
+original_page_num = null;
+page_num = null;
+
 data_structure = {
   object: {
       text: 'biuro',
@@ -53,6 +56,14 @@ function _append_data_row(table, curr_row) {
 	}).map(function(tagobj) { 
 		return '<td>' + (curr_row[tagobj.name] == null ? '' : curr_row[tagobj.name])  + '</td>';
 	}).join('') + '</tr>'));
+}
+
+function process_range() {
+    // "process next" na razie
+    page_num += 1;
+    next_page = window.location.href.replace(/\-\d+\.html$/, '-' + page_num + '.html');
+
+    $('#page' + original_page_num + '-div').load(next_page + ' #page' + page_num + '-div > *');
 }
 
 function sort_and_prepare_data() {
@@ -409,7 +420,11 @@ function analyze_elements() {
     body_width = $('body').width();
     body_height = $('body').height();
 
+    // TODO
 	page = $('#page159-div');
+
+    page_num = /\-\d+\.html$/.exec(window.location.href)[0];
+    original_page_num = page_num = parseInt(page_num.substr(1, page_num.length - 6));
 
     select_tools.div.tools = $('<div id="select-tools" class="jsc-elem" style="display:none;">' +
         'Add new: <input name="tagName"/> <input id="addNewTag" type="submit" value="Dodaj"/><input id="ignoreTag" type="submit" value="Ignore"/></br>' +
@@ -460,6 +475,12 @@ $(function () {
         } else if (e.which == KeyEvent.DOM_VK_E) {
             target_sameline(e);
 			
+        } else if (e.which == KeyEvent.DOM_VK_O) {
+            process_range();
+
+        } else if (e.which == KeyEvent.DOM_VK_H) {
+            highlight_targeted();
+
         } else if (e.which == KeyEvent.DOM_VK_I) {
 			$('img').toggle();
 			$('body').css('background-color', 'white');

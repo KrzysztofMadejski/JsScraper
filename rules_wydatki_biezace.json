@@ -1,1 +1,208 @@
-[{"name":"ignore-pagetitle","ignore":true,"filters":[{"t_sameline":false,"f_classes":null,"pmask_south":124,"pmask_north":null,"pmask_west":null,"pmask_east":null}]},{"name":"ignore-footer","ignore":true,"filters":[{"t_sameline":false,"f_classes":null,"pmask_south":null,"pmask_north":1144,"pmask_west":null,"pmask_east":null}]},{"name":"biuro_kwota","ignore":false,"filters":[{"t_sameline":false,"f_classes":["ft01"],"pmask_south":null,"pmask_north":null,"pmask_west":794,"pmask_east":null}]},{"name":"biuro","ignore":false,"filters":[{"t_sameline":false,"f_classes":["ft01"],"pmask_south":null,"pmask_north":null,"pmask_west":null,"pmask_east":null}]},{"name":"dg_kwota","ignore":false,"filters":[{"t_sameline":false,"f_classes":["ft04"],"pmask_south":null,"pmask_north":null,"pmask_west":800,"pmask_east":null}]},{"name":"dg_nazwa","ignore":false,"filters":[{"t_sameline":false,"f_classes":["ft04"],"pmask_south":null,"pmask_north":null,"pmask_west":null,"pmask_east":null},{"t_sameline":false,"f_classes":["ft05"],"pmask_south":null,"pmask_north":null,"pmask_west":null,"pmask_east":null}]},{"name":"dg_sub_kwota","ignore":false,"filters":[{"t_sameline":false,"f_classes":["ft06"],"pmask_south":null,"pmask_north":null,"pmask_west":798,"pmask_east":null}]},{"name":"dg_sub_nazwa","ignore":false,"filters":[{"t_sameline":false,"f_classes":["ft06"],"pmask_south":null,"pmask_north":null,"pmask_west":null,"pmask_east":null},{"t_sameline":false,"f_classes":["ft07"],"pmask_south":null,"pmask_north":null,"pmask_west":null,"pmask_east":null}]},{"name":"gmina_powiat","ignore":false,"filters":[{"t_sameline":false,"f_classes":["ft02"],"pmask_south":null,"pmask_north":null,"pmask_west":null,"pmask_east":113}]},{"name":"zadanie_kwota","ignore":false,"filters":[{"t_sameline":false,"f_classes":["ft00"],"pmask_south":null,"pmask_north":null,"pmask_west":804,"pmask_east":null}]},{"name":"zadanie_nazwa","ignore":false,"filters":[{"t_sameline":true,"f_classes":["ft00"],"pmask_south":null,"pmask_north":null,"pmask_west":null,"pmask_east":135}]},{"name":"zadanie_typ","ignore":false,"filters":[{"t_sameline":true,"f_classes":["ft00"],"pmask_south":null,"pmask_north":null,"pmask_west":null,"pmask_east":149}]},{"name":"zadanie_opis","ignore":false,"filters":[{"t_sameline":true,"f_classes":["ft00"],"pmask_south":null,"pmask_north":null,"pmask_west":null,"pmask_east":null},{"t_sameline":true,"f_classes":["ft010"],"pmask_south":null,"pmask_north":null,"pmask_west":null,"pmask_east":null}]}]
+[
+    {
+        "name": "ignore-pagetitle",
+        "ignore": true,
+        "filters": [
+            {
+                "t_sameline": false,
+                "f_classes": null,
+                "pmask_south": 124,
+                "pmask_north": null,
+                "pmask_west": null,
+                "pmask_east": null
+            }
+        ]
+    },
+    {
+        "name": "ignore-footer",
+        "ignore": true,
+        "filters": [
+            {
+                "t_sameline": false,
+                "f_classes": null,
+                "pmask_south": null,
+                "pmask_north": 1144,
+                "pmask_west": null,
+                "pmask_east": null
+            }
+        ]
+    },
+    {
+        "name": "biuro_kwota",
+        "ignore": false,
+        "filters": [
+            {
+                "t_sameline": false,
+                "f_classes": ["ft01"],
+                "pmask_south": null,
+                "pmask_north": null,
+                "pmask_west": 794,
+                "pmask_east": null
+            }
+        ]
+    },
+    {
+        "name": "biuro",
+        "ignore": false,
+        "filters": [
+            {
+                "t_sameline": false,
+                "f_classes": ["ft01"],
+                "pmask_south": null,
+                "pmask_north": null,
+                "pmask_west": null,
+                "pmask_east": null
+            }
+        ]
+    },
+    {
+        "name": "dg_kwota",
+        "ignore": false,
+        "filters": [
+            {
+                "t_sameline": false,
+                "f_classes": ["ft04"],
+                "pmask_south": null,
+                "pmask_north": null,
+                "pmask_west": 800,
+                "pmask_east": null
+            }
+        ]
+    },
+    {
+        "name": "dg_nazwa",
+        "ignore": false,
+        "filters": [
+            {
+                "t_sameline": false,
+                "f_classes": ["ft04"],
+                "pmask_south": null,
+                "pmask_north": null,
+                "pmask_west": null,
+                "pmask_east": null
+            },
+            {
+                "t_sameline": false,
+                "f_classes": ["ft05"],
+                "pmask_south": null,
+                "pmask_north": null,
+                "pmask_west": null,
+                "pmask_east": null
+            }
+        ]
+    },
+    {
+        "name": "dg_sub_kwota",
+        "ignore": false,
+        "filters": [
+            {
+                "t_sameline": false,
+                "f_classes": ["ft06"],
+                "pmask_south": null,
+                "pmask_north": null,
+                "pmask_west": 798,
+                "pmask_east": null
+            }
+        ]
+    },
+    {
+        "name": "dg_sub_nazwa",
+        "ignore": false,
+        "filters": [
+            {
+                "t_sameline": false,
+                "f_classes": ["ft06"],
+                "pmask_south": null,
+                "pmask_north": null,
+                "pmask_west": null,
+                "pmask_east": null
+            },
+            {
+                "t_sameline": false,
+                "f_classes": ["ft07"],
+                "pmask_south": null,
+                "pmask_north": null,
+                "pmask_west": null,
+                "pmask_east": null
+            }
+        ]
+    },
+    {
+        "name": "gmina_powiat",
+        "ignore": false,
+        "filters": [
+            {
+                "t_sameline": false,
+                "f_classes": ["ft02"],
+                "pmask_south": null,
+                "pmask_north": null,
+                "pmask_west": null,
+                "pmask_east": 113
+            }
+        ]
+    },
+    {
+        "name": "zadanie_kwota",
+        "ignore": false,
+        "filters": [
+            {
+                "t_sameline": false,
+                "f_classes": ["ft00"],
+                "pmask_south": null,
+                "pmask_north": null,
+                "pmask_west": 804,
+                "pmask_east": null
+            }
+        ]
+    },
+    {
+        "name": "zadanie_nazwa",
+        "ignore": false,
+        "filters": [
+            {
+                "t_sameline": true,
+                "f_classes": ["ft00"],
+                "pmask_south": null,
+                "pmask_north": null,
+                "pmask_west": null,
+                "pmask_east": 135
+            }
+        ]
+    },
+    {
+        "name": "zadanie_typ",
+        "ignore": false,
+        "filters": [
+            {
+                "t_sameline": true,
+                "f_classes": ["ft00"],
+                "pmask_south": null,
+                "pmask_north": null,
+                "pmask_west": null,
+                "pmask_east": 149
+            }
+        ]
+    },
+    {
+        "name": "zadanie_opis",
+        "ignore": false,
+        "filters": [
+            {
+                "t_sameline": true,
+                "f_classes": ["ft00"],
+                "pmask_south": null,
+                "pmask_north": null,
+                "pmask_west": null,
+                "pmask_east": null
+            },
+            {
+                "t_sameline": true,
+                "f_classes": ["ft010"],
+                "pmask_south": null,
+                "pmask_north": null,
+                "pmask_west": null,
+                "pmask_east": null
+            }
+        ]
+    }
+]
