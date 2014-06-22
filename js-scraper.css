@@ -7,6 +7,10 @@
     background-color: rgba(255,0,0,0.7) !important;
 }
 
+.hierarchy-left, .hierarchy-right {
+	cursor: pointer;
+}
+
 #select-tools {
 	padding: 20px;
     background-color: white;

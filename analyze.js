@@ -1,3 +1,19 @@
+// <script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/sha1.js"></script>
+
+// TODO Aby dzialal
+// - hierarchicznosc kolumn (edytor drzewek - pozycja lewo,prawo; div:margin-left < > )
+
+// TODO przebudowac architekture
+// - definiowanie i zbieranie danych osobno
+// - MVC + templates - Knockout
+// - osobno kontener danych (warunkowe dodanie danych z nowej strony, numer wiersza ostatniego i wypelnione w nim pola)
+// - przetwarzanie aktualnej strony, aby wyswietlal wyniki (wyniki danej strony podswietlone)
+
+// TODO Aby bylo zajebiscie
+// - kolorowanie klasy
+// - rownolegle ladowanie stylu i contentu
+// - jakie sa aktywne filtry
+
 // zbierz i pokoloruj klasy
 classes = {};
 elements = {};
@@ -58,33 +74,133 @@ function _append_data_row(table, curr_row) {
 	}).join('') + '</tr>'));
 }
 
+function showHierarchy() {
+	$('#hierarchy').empty();
+	$.each(tags, function(idx, tag) {
+		row = $('<li>' + tag.name + ' <a class="hierarchy-left">&lt;</a> <a class="hierarchy-right">&gt;</a></li>');
+		row.addClass(tag.name);
+		row.css('margin-left', (17 * tag.level) + 'px');
+		$('#hierarchy').append(row);
+	});
+}
+
+function moveHierarchyLeft() {
+	tagName = $(this).parent().attr('class');
+	$.each(tags, function(idx, tag) {
+		if (tag.name == tagName) {
+			tag.level -= 1;
+			if (tag.level < 0) {
+				tag.level = 0;
+			}
+		}
+	});
+	showHierarchy();
+}
+
+function moveHierarchyRight() {
+	tagName = $(this).parent().attr('class');
+	$.each(tags, function(idx, tag) {
+		if (tag.name == tagName) {
+			tag.level += 1;
+		}
+	});
+	showHierarchy();
+}
+
 function process_range() {
     // "process next" na razie
     page_num += 1;
     next_page = window.location.href.replace(/\-\d+\.html$/, '-' + page_num + '.html');
+	
+	// change content
+    $('#page' + original_page_num + '-div').load(next_page + ' #page' + page_num + '-div > *', function() {
+		// update styles
+		$.get(next_page, function(data) { 
+			newStyles = $(data).siblings('style').text();
+			newClassDefs = parseStyleDefinitions(newStyles);
 
-    $('#page' + original_page_num + '-div').load(next_page + ' #page' + page_num + '-div > *');
+			$('head style')[0].innerHTML = newStyles;
+			
+			// foreach tag select corresponding elements and tag them
+			// TODO horrible hack
+			$.each(tags, function(idx, tag) {
+				$.each(tag.filters, function(fidx, f) {
+					filters = $.extend({}, f);
+					// translate classes
+					if (f.f_classes != null) {
+						filters.f_classes = [];
+						$.each(f.f_classes, function(ffidx, cl) {
+							newCl = mapClass(cl);
+							if (newCl != null)
+								filters.f_classes.push(newCl);
+						});
+					}
+
+					select_tools.t_class = filters.f_classes && filters.f_classes.length > 0; 
+					if (select_tools.t_class)
+						select_tools.cache_classes = filters.f_classes;
+					select_tools.t_sameline = filters.t_sameline;
+					// TODO stan niezalezny od filtra, funkcja find_by_filter
+
+					highlight_targeted();
+
+					if (tag.ignore) {
+						$('.jsc-targeted').addClass(jsc_class_prefix + 'ignore-' + tag.name);	
+					} else {
+						$('.jsc-targeted').addClass(jsc_class_prefix + 'tag-' + tag.name);	
+					}	
+					$('.jsc-targeted').addClass('jsc-processed');
+					
+					reset_filters();
+				});
+			});
+			
+
+			sort_and_prepare_data();			
+		});
+	});
 }
+
+function mapClass(cl) {
+	sha1 = oldClassDefs[cl].sha1;
+	for(newCl in newClassDefs) {
+		if (newClassDefs[newCl].sha1 == sha1) {
+			return newCl;
+		}
+	}
+	
+	// class doesn't exist, return random so selector works
+	return '' + CryptoJS.SHA1('' + Math.random());
+}
+
+function parseStyleDefinitions(styleText) {
+	defs = {};
+	
+	styleText = styleText.replace('<!--','').replace('-->','');
+	$.each(styleText.split('}'), function(idx, def) {
+		def = def.split('{');
+		if (def[0].indexOf('.') >= 0) {
+			sel = def[0].replace(/[\s\.]/g, '');
+			cssText = def[1].replace(/\s/g, ''); // TODO better normalize, sort keys
+			defs[sel] = {
+				cssText: cssText,
+				sha1: CryptoJS.SHA1(cssText).toString(CryptoJS.enc.Base64)
+			};
+		}
+	});
+	
+	return defs;
+}
+
+
+last_tag = null;
+last_tag_level = -1;
+curr_row = {};
 
 function sort_and_prepare_data() {
 	// 3px buffer
 	sorted = $('p').sort(_sort_LR);
 	
-	table = $('#data table');
-	table.empty();
-	table.append(header = $('<tr></tr>'));
-	
-	$.each(tags.filter(function(tagdef) {
-		return !tagdef.ignore;
-	}), function(idx, tag) {
-		header.append($('<th>' + tag.name + '</th>'));
-	});
-	
-	$('#data').show();
-	
-	last_tag = null;
-	curr_row = {};
-	row = {};
 	sorted.each(function(idx, el) {
 		tag = $(el).attr('class').split(/\s+/).filter(function(cl) {
 			return cl.indexOf(jsc_class_prefix + 'tag-') == 0;
@@ -93,7 +209,7 @@ function sort_and_prepare_data() {
 			tag = tag[0].substr((jsc_class_prefix + 'tag-').length);
 			
 			if (tag != last_tag) {
-				if (curr_row[tag] != null) {
+				if (curr_row[tag] != null || tag.level < last_tag_level ) {
 					// this field was filled before so start a new row
 					_append_data_row(table, curr_row);
 					
@@ -106,16 +222,16 @@ function sort_and_prepare_data() {
 				curr_row[tag] = curr_row[tag] + ' ' + $(el).text(); 
 			}
 			last_tag = tag;
+			last_tag_level = tag.level;
 		}
 	});
-	
+}
+
+function data_finish() {
 	// last_row
 	if (tags.some(function(tagdef){ return curr_row[tagdef.name] != null; })) {
 		_append_data_row(table, curr_row);
 	}
-	
-	// show rules
-	$('#rules').text(JSON.stringify(tags));
 }
 
 function filters_enabled() {
@@ -252,6 +368,22 @@ function tag_elements(targeted) {
     //hover_out();
 }
 
+function updateCsv() {
+	table = $('#data table');
+	csv_wrapper = $('#csv');
+	
+	csv = '';
+	table.find('tr').each(function (ridx, row) {
+		$(row).children().each(function(cidx, fld) {
+			csv += $(fld).text() + ";";
+		});
+		
+		csv += "\n";
+	});
+	
+	csv_wrapper.text(csv);
+}
+
 function addTagHandler() {
 	filters_copy = $.extend({
 		t_sameline: select_tools.t_sameline
@@ -265,8 +397,10 @@ function addTagHandler() {
 		tags.push({			
 			name: (ignoreTag ? 'ignore-' : '') + tagName,
 			ignore: ignoreTag,
+			level: 0,
 			filters: [filters_copy]
 		});
+		showHierarchy();
 		
 	} else if (this.id == 'useExistingTag') {
 		if (tags.length == 0)
@@ -285,11 +419,13 @@ function addTagHandler() {
 		return;
 	}
 	
+	// mark elements as processed
 	if (ignoreTag) {
 		$('.jsc-targeted').addClass(jsc_class_prefix + 'ignore-' + tagName);	
 	} else {
 		$('.jsc-targeted').addClass(jsc_class_prefix + 'tag-' + tagName);	
 	}	
+	$('.jsc-targeted').addClass('jsc-processed');
 	
 	// update select
 	select = $('#select-tools select[name="existingTag"]');
@@ -298,15 +434,31 @@ function addTagHandler() {
 		select.append($('<option></option>').attr("value", t.name).text(t.name));
 	});
 	
-	// mark elements as processed
-	$('.jsc-targeted').addClass('jsc-processed');
 	
 	// hide panel, rerender
 	select_tools.panel_add_tag = false;
 	select_tools.div.tools.toggle();
 	
 	reset_filters(); // TODO cache_classes ?
-	sort_and_prepare_data();
+	
+	// refresh table headers
+	header = $('<tr></tr>')
+	$.each(tags.filter(function(tagdef) {
+		return !tagdef.ignore;
+	}), function(idx, tag) {
+		header.append($('<th>' + tag.name + '</th>'));
+	});
+	
+	table = $('#data table');
+	if (table.find('thead').length == 0)
+		table.append($('<thead></thead>'));
+	table.find('thead').empty();
+	table.find('thead').append(header);
+	
+	// show rules
+	$('#rules').text(JSON.stringify(tags));
+	
+	$('#data').show();
 }
 
 function on_mouseenter() {
@@ -431,7 +583,10 @@ function analyze_elements() {
 		'or use existing: <select name="existingTag"></select><input id="useExistingTag" type="submit" value="Dodaj"/></br>' +
 		 '<input id="cancel" type="submit" value="Cancel"/>' +
         '</div>');
-	select_tools.div.data = $('<div id="data" class="jsc-elem" style="display: none;">Data:<table></table><div>Rules:</div><textarea id="rules"></textarea></div>');
+	select_tools.div.data = $('<div id="data" class="jsc-elem" style="display: none;">'
+		+ '<div>Hierarchia danych:<ul id="hierarchy"></ul></div>'
+		+'Data:<table></table>' 
+		+ '<div>Rules:</div><textarea id="rules"></textarea><div><input id="updateCsv" type="button" value="updateCsv"/></div><textarea id="csv"></textarea></div>');
 	select_tools.div.data.css('left', page.width() + 20);
 	
     select_tools.mask_div.pmask_south = $('<div id="pmask-south" class="jsc-elem" style="display: none"></div>');
@@ -451,6 +606,9 @@ function analyze_elements() {
     }
 
 	$(document).on('click', '#select-tools input[type="submit"]', addTagHandler);
+	$(document).on('click', 'input#updateCsv', updateCsv);
+	$(document).on('click', '.hierarchy-right', moveHierarchyRight);	
+	$(document).on('click', '.hierarchy-left', moveHierarchyLeft);
 }
 
 $(function () {
@@ -476,7 +634,13 @@ $(function () {
             target_sameline(e);
 			
         } else if (e.which == KeyEvent.DOM_VK_O) {
-            process_range();
+			if (e.shiftKey) {
+				while(page_num < 285) {
+					process_range();		
+				}				
+			} else {
+				process_range();
+			}            
 
         } else if (e.which == KeyEvent.DOM_VK_H) {
             highlight_targeted();
@@ -497,5 +661,8 @@ $(function () {
     });
 
     analyze_elements();
+	oldClassDefs = parseStyleDefinitions($('head style').text());
 });
 
+var oldClassDefs = {};
+var newClassDefs = {};
