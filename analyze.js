@@ -13,6 +13,7 @@
 // - kolorowanie klasy
 // - rownolegle ladowanie stylu i contentu
 // - jakie sa aktywne filtry
+// - przesuwanie leveli prawo-lewo ma nieruchome strzalki
 
 // zbierz i pokoloruj klasy
 classes = {};
@@ -94,6 +95,10 @@ function moveHierarchyLeft() {
 			}
 		}
 	});
+	
+	// show rules
+	$('#rules').val(JSON.stringify(tags));
+	
 	showHierarchy();
 }
 
@@ -104,10 +109,44 @@ function moveHierarchyRight() {
 			tag.level += 1;
 		}
 	});
+	
+	// show rules
+	$('#rules').val(JSON.stringify(tags));
+	
 	showHierarchy();
 }
 
-function process_range() {
+function tagByDefinition() {
+	$.each(tags, function(idx, tag) {
+		$.each(tag.filters, function(fidx, f) {
+			filters = $.extend({}, f);
+			
+			select_tools.t_class = filters.f_classes && filters.f_classes.length > 0; 
+			if (select_tools.t_class)
+				select_tools.cache_classes = filters.f_classes;
+			select_tools.t_sameline = filters.t_sameline;
+			// TODO stan niezalezny od filtra, funkcja find_by_filter
+
+			highlight_targeted();
+
+			if (tag.ignore) {
+				$('.jsc-targeted').addClass(jsc_class_prefix + 'ignore-' + tag.name);	
+			} else {
+				$('.jsc-targeted').addClass(jsc_class_prefix + 'tag-' + tag.name);	
+			}	
+			$('.jsc-targeted').addClass('jsc-processed');
+			$('.jsc-targeted').removeClass('jsc-targeted');
+
+			reset_filters();
+		});
+	});
+}
+
+function process_range(page_limit_inclusive) {
+	if (page_limit_inclusive && page_num >= page_limit_inclusive) {
+		return;
+	}
+	
     // "process next" na razie
     page_num += 1;
     next_page = window.location.href.replace(/\-\d+\.html$/, '-' + page_num + '.html');
@@ -118,45 +157,18 @@ function process_range() {
 		$.get(next_page, function(data) { 
 			newStyles = $(data).siblings('style').text();
 			newClassDefs = parseStyleDefinitions(newStyles);
+			tagElementsClass(newClassDefs);
 
 			$('head style')[0].innerHTML = newStyles;
 			
 			// foreach tag select corresponding elements and tag them
 			// TODO horrible hack
-			$.each(tags, function(idx, tag) {
-				$.each(tag.filters, function(fidx, f) {
-					filters = $.extend({}, f);
-					// translate classes
-					if (f.f_classes != null) {
-						filters.f_classes = [];
-						$.each(f.f_classes, function(ffidx, cl) {
-							newCl = mapClass(cl);
-							if (newCl != null)
-								filters.f_classes.push(newCl);
-						});
-					}
+			tagByDefinition();			
 
-					select_tools.t_class = filters.f_classes && filters.f_classes.length > 0; 
-					if (select_tools.t_class)
-						select_tools.cache_classes = filters.f_classes;
-					select_tools.t_sameline = filters.t_sameline;
-					// TODO stan niezalezny od filtra, funkcja find_by_filter
-
-					highlight_targeted();
-
-					if (tag.ignore) {
-						$('.jsc-targeted').addClass(jsc_class_prefix + 'ignore-' + tag.name);	
-					} else {
-						$('.jsc-targeted').addClass(jsc_class_prefix + 'tag-' + tag.name);	
-					}	
-					$('.jsc-targeted').addClass('jsc-processed');
-					
-					reset_filters();
-				});
-			});
+			sort_and_prepare_data();	
 			
-
-			sort_and_prepare_data();			
+			if (page_limit_inclusive)
+				process_range(page_limit_inclusive);
 		});
 	});
 }
@@ -184,7 +196,7 @@ function parseStyleDefinitions(styleText) {
 			cssText = def[1].replace(/\s/g, ''); // TODO better normalize, sort keys
 			defs[sel] = {
 				cssText: cssText,
-				sha1: CryptoJS.SHA1(cssText).toString(CryptoJS.enc.Base64)
+				sha1: 'sha' + CryptoJS.SHA1(cssText).toString(CryptoJS.enc.Base64)
 			};
 		}
 	});
@@ -198,36 +210,41 @@ last_tag_level = -1;
 curr_row = {};
 
 function sort_and_prepare_data() {
+	table = $('#data table');
+	
 	// 3px buffer
 	sorted = $('p').sort(_sort_LR);
 	
 	sorted.each(function(idx, el) {
-		tag = $(el).attr('class').split(/\s+/).filter(function(cl) {
+		tagClass = $(el).attr('class').split(/\s+/).filter(function(cl) {
 			return cl.indexOf(jsc_class_prefix + 'tag-') == 0;
 		});
-		if (tag.length > 0) {
-			tag = tag[0].substr((jsc_class_prefix + 'tag-').length);
+		if (tagClass.length > 0) {			
+			tagName = tagClass[0].substr((jsc_class_prefix + 'tag-').length);
+			tag = getTagBy(tagName);
 			
-			if (tag != last_tag) {
-				if (curr_row[tag] != null || tag.level < last_tag_level ) {
+			if (tagName != last_tag) {
+				if (curr_row[tagName] != null || tag.level < last_tag_level ) {
 					// this field was filled before so start a new row
 					_append_data_row(table, curr_row);
 					
 					curr_row = {};
 				}
-				curr_row[tag] = $(el).text();
+				curr_row[tagName] = $(el).text();
 				
 			} else {
 				// append text to last_tag (TODO sometimes[ie empty sections] this may be wrong behavior, TODO glueing rules)
-				curr_row[tag] = curr_row[tag] + ' ' + $(el).text(); 
+				curr_row[tagName] += ' ' + $(el).text(); 
 			}
-			last_tag = tag;
+			last_tag = tagName;
 			last_tag_level = tag.level;
 		}
 	});
 }
 
 function data_finish() {
+	table = $('#data table');
+	
 	// last_row
 	if (tags.some(function(tagdef){ return curr_row[tagdef.name] != null; })) {
 		_append_data_row(table, curr_row);
@@ -306,7 +323,13 @@ function highlight_targeted() {
 	if (select_tools.t_sameline) {
 		candidates.each(function(idx, c) {
 			$(base_selector).each(function(idx, p) {
-				if (Math.abs(parseToPixels($(c).css('top')) - parseToPixels($(p).css('top'))) <= line_buff) {
+                // overlapping line strap
+                ctop = parseToPixels($(c).css('top'));
+                cbottom = parseToPixels($(c).css('top')) + $(c).height();
+                ptop = parseToPixels($(p).css('top'));
+                pbottom = parseToPixels($(p).css('top')) + $(p).height();
+
+				if (!(ctop > pbottom || ptop > cbottom)) {
 					$(p).addClass(jsc_class_prefix + 'targeted');
 				}
 			});
@@ -372,6 +395,7 @@ function updateCsv() {
 	table = $('#data table');
 	csv_wrapper = $('#csv');
 	
+	// TODO escape csv
 	csv = '';
 	table.find('tr').each(function (ridx, row) {
 		$(row).children().each(function(cidx, fld) {
@@ -382,6 +406,38 @@ function updateCsv() {
 	});
 	
 	csv_wrapper.text(csv);
+}
+
+function getTagBy(name) {
+	for(i=0; i<tags.length;i++) {
+		if (tags[i].name == name) {
+			return tags[i];
+		}
+	}
+	return null;
+}
+
+function uploadRules() {
+	tags = JSON.parse($('#rules').val());
+	reset_filters();
+	showHierarchy();
+	
+	$('.jsc-processed').each(function(idx, el) {
+		$.each($(el).attr('class').split(/\s+/), function(cidx, cl) {
+			if (cl.indexOf('jsc-') == 0) {
+				$(el).removeClass(cl);
+			}
+		});
+	});
+	
+	last_tag = null;
+	last_tag_level = -1;
+	curr_row = {};
+	
+	$('#data table').empty();
+	
+	tagByDefinition();
+	sort_and_prepare_data();
 }
 
 function addTagHandler() {
@@ -407,12 +463,8 @@ function addTagHandler() {
 			return;
 			
 		tagName = $('#select-tools select[name="existingTag"]').val();
-		for(i=0; i<tags.length;i++) {
-			if (tags[i].name == tagName) {
-				tags[i].filters.push(filters_copy);
-				break;
-			}
-		}
+		getTagBy(tagName).filters.push(filters_copy);
+		
 	} else if (this.id == 'cancel') {
 		select_tools.panel_add_tag = false;
 		select_tools.div.tools.toggle();
@@ -456,9 +508,7 @@ function addTagHandler() {
 	table.find('thead').append(header);
 	
 	// show rules
-	$('#rules').text(JSON.stringify(tags));
-	
-	$('#data').show();
+	$('#rules').val(JSON.stringify(tags));
 }
 
 function on_mouseenter() {
@@ -471,7 +521,8 @@ function on_mouseenter() {
 	// remember classes
 	if (jel.attr('class')) {
 		select_tools.cache_classes = jel.attr('class').split(/\s+/).filter(function(cl) {
-			return cl.indexOf(jsc_class_prefix) != 0;
+			return cl.indexOf(jsc_class_prefix) != 0 && cl.indexOf('ft') != 0;
+			// TODO sha classes to be shown, indexOf ft goes out
 		});
 	}
 	
@@ -572,21 +623,20 @@ function analyze_elements() {
     body_width = $('body').width();
     body_height = $('body').height();
 
-    // TODO
-	page = $('#page159-div');
-
-    page_num = /\-\d+\.html$/.exec(window.location.href)[0];
-    original_page_num = page_num = parseInt(page_num.substr(1, page_num.length - 6));
+	page_num_part = /\-\d+\.html$/.exec(window.location.href)[0];	
+    original_page_num = page_num = parseInt(page_num_part.substr(1, page_num_part.length - 6));
+	
+	page = $('#page' + page_num + '-div');
 
     select_tools.div.tools = $('<div id="select-tools" class="jsc-elem" style="display:none;">' +
         'Add new: <input name="tagName"/> <input id="addNewTag" type="submit" value="Dodaj"/><input id="ignoreTag" type="submit" value="Ignore"/></br>' +
 		'or use existing: <select name="existingTag"></select><input id="useExistingTag" type="submit" value="Dodaj"/></br>' +
 		 '<input id="cancel" type="submit" value="Cancel"/>' +
         '</div>');
-	select_tools.div.data = $('<div id="data" class="jsc-elem" style="display: none;">'
+	select_tools.div.data = $('<div id="data" class="jsc-elem" style="">'
 		+ '<div>Hierarchia danych:<ul id="hierarchy"></ul></div>'
 		+'Data:<table></table>' 
-		+ '<div>Rules:</div><textarea id="rules"></textarea><div><input id="updateCsv" type="button" value="updateCsv"/></div><textarea id="csv"></textarea></div>');
+		+ '<div>Rules:</div><textarea id="rules"></textarea><div><input id="uploadRules" type="button" value="Upload Rules"/><input id="updateCsv" type="button" value="Update CSV"/></div><textarea id="csv"></textarea></div>');
 	select_tools.div.data.css('left', page.width() + 20);
 	
     select_tools.mask_div.pmask_south = $('<div id="pmask-south" class="jsc-elem" style="display: none"></div>');
@@ -607,6 +657,7 @@ function analyze_elements() {
 
 	$(document).on('click', '#select-tools input[type="submit"]', addTagHandler);
 	$(document).on('click', 'input#updateCsv', updateCsv);
+	$(document).on('click', 'input#uploadRules', uploadRules);
 	$(document).on('click', '.hierarchy-right', moveHierarchyRight);	
 	$(document).on('click', '.hierarchy-left', moveHierarchyLeft);
 }
@@ -634,14 +685,8 @@ $(function () {
             target_sameline(e);
 			
         } else if (e.which == KeyEvent.DOM_VK_O) {
-			if (e.shiftKey) {
-				while(page_num < 285) {
-					process_range();		
-				}				
-			} else {
-				process_range();
-			}            
-
+			process_range(e.shiftKey ? 285 : null);
+			
         } else if (e.which == KeyEvent.DOM_VK_H) {
             highlight_targeted();
 
@@ -662,7 +707,17 @@ $(function () {
 
     analyze_elements();
 	oldClassDefs = parseStyleDefinitions($('head style').text());
+	newClassDefs = $.extend({}, oldClassDefs); // 1:1 mapping	
+	
+	tagElementsClass(oldClassDefs);
 });
+
+function tagElementsClass(classDefs) {
+	for(sel in classDefs) {
+		$('.' + sel).addClass(classDefs[sel].sha1);
+		//$('.' + sel).removeClass(sel);
+	}
+}
 
 var oldClassDefs = {};
 var newClassDefs = {};
