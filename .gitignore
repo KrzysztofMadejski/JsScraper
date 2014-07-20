@@ -1,0 +1,7 @@
+# IDEs
+.idea
+
+# Compiled coffee files
+src/**/*.js
+src/*.js
+
