@@ -1,0 +1,197 @@
+[
+    {
+        "name": "ignore-header",
+        "ignore": true,
+        "level": 0,
+        "filters": [
+            {
+                "t_sameline": false,
+                "f_classes": null,
+                "pmask_south": 129,
+                "pmask_north": null,
+                "pmask_west": null,
+                "pmask_east": null
+            }
+        ]
+    },
+    {
+        "name": "ignore-footer",
+        "ignore": true,
+        "level": 0,
+        "filters": [
+            {
+                "t_sameline": false,
+                "f_classes": null,
+                "pmask_south": null,
+                "pmask_north": 1142,
+                "pmask_west": null,
+                "pmask_east": null
+            }
+        ]
+    },
+    {
+        "name": "biuro_kwota",
+        "ignore": false,
+        "level": 0,
+        "filters": [
+            {
+                "t_sameline": false,
+                "f_classes": ["shac78cfdf397ac408f17cf0a1430df6c397b5b0397"],
+                "pmask_south": null,
+                "pmask_north": null,
+                "pmask_west": 784,
+                "pmask_east": null
+            }
+        ]
+    },
+    {
+        "name": "biuro_nazwa",
+        "ignore": false,
+        "level": 0,
+        "filters": [
+            {
+                "t_sameline": true,
+                "f_classes": ["shac78cfdf397ac408f17cf0a1430df6c397b5b0397"],
+                "pmask_south": null,
+                "pmask_north": null,
+                "pmask_west": null,
+                "pmask_east": 109
+            }
+        ]
+    },
+    {
+        "name": "dzial_kwota",
+        "ignore": false,
+        "level": 1,
+        "filters": [
+            {
+                "t_sameline": false,
+                "f_classes": ["shadac45422ff42dad16a54aae506c9cacb1a7c5db6"],
+                "pmask_south": null,
+                "pmask_north": null,
+                "pmask_west": 792,
+                "pmask_east": null
+            }
+        ]
+    },
+    {
+        "name": "dzial_nazwa",
+        "ignore": false,
+        "level": 1,
+        "filters": [
+            {
+                "t_sameline": true,
+                "f_classes": ["shadac45422ff42dad16a54aae506c9cacb1a7c5db6"],
+                "pmask_south": null,
+                "pmask_north": null,
+                "pmask_west": null,
+                "pmask_east": 134
+            }
+        ]
+    },
+    {
+        "name": "dzial_sub_kwota",
+        "ignore": false,
+        "level": 2,
+        "filters": [
+            {
+                "t_sameline": false,
+                "f_classes": ["sha4ff85cfc9d4e6fc185d12dd3c7c9c8807b58af68"],
+                "pmask_south": null,
+                "pmask_north": null,
+                "pmask_west": 799,
+                "pmask_east": null
+            }
+        ]
+    },
+    {
+        "name": "dzial_sub_nazwa",
+        "ignore": false,
+        "level": 2,
+        "filters": [
+            {
+                "t_sameline": true,
+                "f_classes": ["sha4ff85cfc9d4e6fc185d12dd3c7c9c8807b58af68"],
+                "pmask_south": null,
+                "pmask_north": null,
+                "pmask_west": null,
+                "pmask_east": 135
+            }
+        ]
+    },
+    {
+        "name": "gmina_powiat",
+        "ignore": false,
+        "level": 3,
+        "filters": [
+            {
+                "t_sameline": false,
+                "f_classes": ["sha2b3e5df7dacf413621d0d9e862972d4c7cfd8144"],
+                "pmask_south": null,
+                "pmask_north": null,
+                "pmask_west": null,
+                "pmask_east": 113
+            }
+        ]
+    },
+    {
+        "name": "zadanie",
+        "ignore": false,
+        "level": 4,
+        "filters": [
+            {
+                "t_sameline": true,
+                "f_classes": ["sha2b3e5df7dacf413621d0d9e862972d4c7cfd8144"],
+                "pmask_south": null,
+                "pmask_north": null,
+                "pmask_west": null,
+                "pmask_east": 138
+            }
+        ]
+    },
+    {
+        "name": "zadanie_kwota",
+        "ignore": false,
+        "level": 4,
+        "filters": [
+            {
+                "t_sameline": false,
+                "f_classes": ["sha2b3e5df7dacf413621d0d9e862972d4c7cfd8144"],
+                "pmask_south": null,
+                "pmask_north": null,
+                "pmask_west": 803,
+                "pmask_east": null
+            }
+        ]
+    },
+    {
+        "name": "zadanie_typ",
+        "ignore": false,
+        "level": 4,
+        "filters": [
+            {
+                "t_sameline": true,
+                "f_classes": ["sha2b3e5df7dacf413621d0d9e862972d4c7cfd8144"],
+                "pmask_south": null,
+                "pmask_north": null,
+                "pmask_west": null,
+                "pmask_east": 147
+            }
+        ]
+    },
+    {
+        "name": "zadanie_tresc",
+        "ignore": false,
+        "level": 4,
+        "filters": [
+            {
+                "t_sameline": true,
+                "f_classes": null,
+                "pmask_south": null,
+                "pmask_north": null,
+                "pmask_west": null,
+                "pmask_east": 168
+            }
+        ]
+    }
+]

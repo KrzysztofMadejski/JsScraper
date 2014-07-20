@@ -1,0 +1,115 @@
+[
+    {
+        "name": "ignore-header",
+        "ignore": true,
+        "level": 0,
+        "filters": [
+            {
+                "t_sameline": false,
+                "f_classes": null,
+                "pmask_south": 112,
+                "pmask_north": null,
+                "pmask_west": null,
+                "pmask_east": null
+            }
+        ]
+    },
+    {
+        "name": "ignore-footer",
+        "ignore": true,
+        "level": 0,
+        "filters": [
+            {
+                "t_sameline": false,
+                "f_classes": null,
+                "pmask_south": null,
+                "pmask_north": 1188,
+                "pmask_west": null,
+                "pmask_east": null
+            }
+        ]
+    },
+    {
+        "name": "biuro_nazwa_kwota",
+        "ignore": false,
+        "level": 0,
+        "filters": [
+            {
+                "t_sameline": true,
+                "f_classes": ["sha2170e6f1c8db239355761dd8ab40c42611980fa5", "sha127bb41cb033dd8bfab94398cd637f23146a45ab"],
+                "pmask_south": null,
+                "pmask_north": null,
+                "pmask_west": null,
+                "pmask_east": 72
+            }
+        ]
+    },
+    {
+        "name": "dzial_nazwa_kwota",
+        "ignore": false,
+        "level": 1,
+        "filters": [
+            {
+                "t_sameline": true,
+                "f_classes": ["shadac45422ff42dad16a54aae506c9cacb1a7c5db6"],
+                "pmask_south": null,
+                "pmask_north": null,
+                "pmask_west": null,
+                "pmask_east": 60
+            }
+        ]
+    },
+    {
+        "name": "dzial_sub_nazwa_kwota",
+        "ignore": false,
+        "level": 2,
+        "filters": [
+            {
+                "t_sameline": true,
+                "f_classes": ["sha4ff85cfc9d4e6fc185d12dd3c7c9c8807b58af68"],
+                "pmask_south": null,
+                "pmask_north": null,
+                "pmask_west": null,
+                "pmask_east": 59
+            }
+        ]
+    },
+    {
+        "name": "zadanie_num",
+        "ignore": false,
+        "level": 3,
+        "filters": [
+            {
+                "t_sameline": false,
+                "f_classes": ["sha2b3e5df7dacf413621d0d9e862972d4c7cfd8144"],
+                "pmask_south": null,
+                "pmask_north": null,
+                "pmask_west": null,
+                "pmask_east": 94
+            }
+        ]
+    },
+    {
+        "name": "zadanie_tresc_kwota",
+        "ignore": false,
+        "level": 3,
+        "filters": [
+            {
+                "t_sameline": true,
+                "f_classes": ["sha91b1d9b08b1c636fbe0f1c958baf7b2aa01db810"],
+                "pmask_south": null,
+                "pmask_north": null,
+                "pmask_west": null,
+                "pmask_east": null
+            },
+            {
+                "t_sameline": true,
+                "f_classes": ["sha2b3e5df7dacf413621d0d9e862972d4c7cfd8144"],
+                "pmask_south": null,
+                "pmask_north": null,
+                "pmask_west": null,
+                "pmask_east": null
+            }
+        ]
+    }
+]

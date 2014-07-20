@@ -435,6 +435,7 @@ function uploadRules() {
 	curr_row = {};
 	
 	$('#data table').empty();
+	refresh_table_headers();
 	
 	tagByDefinition();
 	sort_and_prepare_data();
@@ -493,7 +494,13 @@ function addTagHandler() {
 	
 	reset_filters(); // TODO cache_classes ?
 	
-	// refresh table headers
+	refresh_table_headers();	
+	
+	// show rules
+	$('#rules').val(JSON.stringify(tags));
+}
+
+function refresh_table_headers() {
 	header = $('<tr></tr>')
 	$.each(tags.filter(function(tagdef) {
 		return !tagdef.ignore;
@@ -506,9 +513,6 @@ function addTagHandler() {
 		table.append($('<thead></thead>'));
 	table.find('thead').empty();
 	table.find('thead').append(header);
-	
-	// show rules
-	$('#rules').val(JSON.stringify(tags));
 }
 
 function on_mouseenter() {
@@ -689,6 +693,9 @@ $(function () {
 			
         } else if (e.which == KeyEvent.DOM_VK_H) {
             highlight_targeted();
+
+        } else if (e.which == KeyEvent.DOM_VK_F) {
+            data_finish();
 
         } else if (e.which == KeyEvent.DOM_VK_I) {
 			$('img').toggle();
