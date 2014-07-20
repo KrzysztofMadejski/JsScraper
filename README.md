@@ -4,7 +4,7 @@
 Inspiration came from [KimonoLabs](https://www.kimonolabs.com/) and retyping by hand tons of pdfs (hooray to *public-but-not-open-data*).
 
 # How to
-1. Convert your pdf using `pdf2html -c doc.pdf out/doc.html`. You can find Pdf2Html [here](http://pdftohtml.sourceforge.net/).
+1. Convert your pdf using `pdftohtml -c doc.pdf out/doc.html`. You can find PdfToHtml [here](http://pdftohtml.sourceforge.net/).
 2. Insert script and styles references (soon to be swapped by bookmarklet)
 
         <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
