@@ -3,6 +3,73 @@
 <HEAD>
 <TITLE>Page 1</TITLE>
 
+    <script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
+
+	<!-- Bootstrap -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css"/>
+	<!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap-theme.min.css">-->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+
+    <!-- EmberJS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/2.0.0/handlebars.min.js"></script>
+    <script src="http://builds.emberjs.com/release/ember.min.js"></script>
+    <script src="http://builds.emberjs.com/tags/v1.0.0-beta.14.1/ember-data.min.js"></script>
+
+    <script type="text/javascript" src="../../../src/ui/ui.js"></script>
+    <script type="text/javascript" src="../../../src/utils.js"></script>
+
+	<style type="text/css">
+		body * {
+			/*border: black solid thin;*/
+		}
+
+		#jsc-main-window {
+			position: fixed;
+            right: 10px;
+            top: 10px;
+			z-index: 100;
+            box-shadow: 2px 2px 20px rgba(0, 0, 0, 0.6);
+		}
+
+		#jsc-main-window div {
+
+		}
+        .panel-left  {
+            position: relative;
+            top: 0px;
+            left: -200px;
+        }
+        .panel-main {
+            position: relative;
+            width: 200px;
+        }
+        .panel-vertical {
+            transform: rotate(90deg);
+            background-color: #f5f5f5;
+            border-color: #ddd;
+            top: 18px;
+            position: relative;
+        }
+        #jsc-data .panel-body {
+            width: 800px;
+        }
+
+		/* Overwrite bootstrap */
+		.panel {
+			margin-bottom: 0px;
+			border-radius: 0px;
+		}
+		.panel-heading {
+			padding: 0px 5px;
+			border-top-left-radius: 0px;
+			border-top-right-radius: 0px;
+
+		}
+
+	</style>
+    <script type="text/javascript">
+    </script>
+
 <META http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 <STYLE type="text/css">
 <!--
@@ -15,6 +82,69 @@
 </STYLE>
 </HEAD>
 <BODY bgcolor="#A0A0A0" vlink="blue" link="blue">
+
+<script type="text/x-handlebars" data-template-name="jscui">
+        <section id="todoapp">
+          Tutaj tekst ember
+          {{! ... additional lines truncated for brevity ... }}
+        </section>
+
+        <footer id="info">
+          <p>Double-click to edit a todo</p>
+        </footer>
+</script>
+
+<div id="jsc-main-window">
+    <table>
+        <tr>
+            <td style="background-color: #f5f5f5; vertical-align: top">
+                <div id="jsc-data" class="panel panel-default collapse">
+                    <div class="panel-heading">
+                        <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                        Data</div>
+                    <div class="panel-body">Data</div>
+                </div>
+                <div class="panel-vertical collapse in">
+                    <a data-toggle="collapse" href="#jsc-data" aria-expanded="true" aria-controls="jsc-data">
+                        <span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
+                        Data
+                    </a>
+                </div>
+            </td>
+            <td>
+                <div class="panel-main">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <a data-toggle="collapse" href="#jsc-filter" aria-expanded="true"
+                               aria-controls="jsc-filter">
+                                <span class="glyphicon glyphicon-chevron-up" aria-hidden="true"></span>
+                                Filters
+                            </a>
+                        </div>
+                        <div id="jsc-filter" class="panel-body collapse in">Text</div>
+                    </div>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <span class="glyphicon glyphicon-chevron-up" aria-hidden="true"></span>
+                            Data model
+                        </div>
+                        <div class="panel-body">Data model</div>
+                    </div>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <span class="glyphicon glyphicon-chevron-up" aria-hidden="true"></span>
+                            Process
+                        </div>
+                        <div class="panel-body">Process</div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+    </table>
+
+</div>
+
+
 <DIV id="page1-div" style="position:relative;width:892px;height:1263px;">
 <IMG width="892" height="1263" src="lodz_budget_2014001.png" alt="background image"/>
 <P style="position:absolute;top:111px;left:320px;white-space:nowrap" class="ft00"><b>UCHWAŁA&#160;NR&#160;LXXIX/1646/14&#160;</b></P>

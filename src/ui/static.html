@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <script type="text/javascript" src="ui.js"></script>
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css"/>
+    <!-- Optional theme -->
+    <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap-theme.min.css">-->
+
+    <script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+
+    <style type="text/css">
+        body * {
+            border: black solid thin;
+        }
+
+        /* Overwrite bootstrap */
+
+
+        #jsc-main-window {
+
+        }
+
+        #jsc-main-window div {
+
+        }
+    </style>
+</head>
+<body style="background-image: url("http:
+//wallpaperswiki.org/wp-content/uploads/2012/10/Fresh-Green-Leaves-Theme-Desktop-10.jpg")">
+<div id="jsc-main-window" style="width:400px; height:800px;">
+    <div class="panel panel-default">
+        <div class="panel-heading">Filters</div>
+        <div class="panel-body">Text</div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">Data model</div>
+        <div class="panel-body">Data model</div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">Process</div>
+        <div class="panel-body">Process</div>
+    </div>
+    <div class="panel panel-default left-expandable">
+        <div class="panel-collapsed"></div>
+        <div class="panel-heading">Data</div>
+        <div class="panel-body">Data</div>
+    </div>
+</div>
+
+<div id="select-tools" class="jsc-elem" style="display:none;">
+    Add new: <input name="tagName"/> <input id="addNewTag" type="submit" value="Dodaj"/><input id="ignoreTag"
+                                                                                               type="submit"
+                                                                                               value="Ignore"/></br>
+    or use existing: <select name="existingTag"></select><input id="useExistingTag" type="submit"
+                                                                value="Dodaj"/></br>
+    <input id="cancel" type="submit" value="Cancel"/>
+</div>
+
+<div id="data" class="jsc-elem" style="">'
+    <div>Hierarchia danych:
+        <ul id="hierarchy"></ul>
+    </div>
+    Data:
+    <table></table>
+    <div>Rules:</div>
+    <textarea id="rules"></textarea>
+
+    <div><input id="uploadRules" type="button" value="Upload Rules"/><input id="updateCsv" type="button"
+                                                                            value="Update CSV"/></div>
+    <textarea id="csv"></textarea>
+</div>
+</body>
+</html>
